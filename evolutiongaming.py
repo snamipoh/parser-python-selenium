@@ -76,7 +76,7 @@ for element in jobs:
         element['job_type'] = "Embedded SW"
     elif "ux/ui designer" in element['title'].lower() or "UX researcher" in element['title'].lower() \
             or "designer" in element['title'].lower() or "ux designer" in element['title'].lower():
-        element['job_type'] = 'Designer'
+        element['job_type'] = 'Design'
     elif "backend" in element['title'].lower() or "back" in element['title'].lower():
         element['job_type'] = "Backend"
     else:
