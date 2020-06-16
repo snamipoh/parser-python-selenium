@@ -26,7 +26,8 @@ jobs = []
 
 titles = driver.find_elements_by_xpath("//div[@class='c-open-position']//div[@class='c-open-position__title']")
 links = driver.find_elements_by_xpath("//div[@class='c-open-position']//a[@class='c-open-position__overlay-link']")
-locations = driver.find_elements_by_xpath("//div[@class='c-open-position']//div[@class='c-open-position__meta__item']")
+# locations = driver.find_elements_by_xpath("//div[@class='c-open-position']//div[@class='c-open-position__meta__item']/span")
+locations = driver.find_elements_by_xpath("//div[@class='c-open-position']//span[@data-position-location]")
 job_type = "Other"
 job_company = "smartly.io"
 job_date = str(date.today())
@@ -49,6 +50,10 @@ for i in range(num_values):
 for element in jobs:
     if "devops" in element['title'].lower():
         element['job_type'] = "DevOps"
+    elif "data" in element['title'].lower():
+        element['job_type'] = "Data & BI"
+    elif "product manager" in element['title'].lower() or "product marketing" in element['title'].lower():
+        element['job_type'] = "Product"
     elif "product designer" in element['title'].lower():
         element['job_type'] = "Design"
     elif "backend developer" in element['title'].lower() or "back" in element['title'].lower() \
@@ -76,8 +81,7 @@ for element in jobs:
 tuples = [tuple(x.values())[0:] for x in jobs]
 print(tuples)
 
-# Uncomment to upload parsed records to the DB
-
+# Uploading parsed records to the DB
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
