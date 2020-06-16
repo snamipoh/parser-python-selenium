@@ -41,8 +41,10 @@ for i in section:
 # print(jobs)
 
 # Parsing vacancies from Berlin
+
 # driver.execute_script("window.scrollTo(0, 400)")
-driver.find_element_by_xpath("//a[@href='/en/careers/locations/49747']").click()
+# driver.find_element_by_xpath("//a[@href='/en/careers/locations/49747']").click()
+driver.find_element_by_xpath("//li[@class='cn co cp du jp jq jr']/a[@href='/en/careers/locations/49747']").click()
 time.sleep(10)
 
 section_2 = driver.find_elements_by_xpath("//ul[@class='ah aj al an ap aq jp kd ke kf kg']//li")
@@ -105,8 +107,7 @@ tuples = [tuple(x.values())[0:] for x in jobs]
 
 print(tuples)
 
-# Uncomment to upload parsed records to the DB
-
+# Uploading parsed records to the DB
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
