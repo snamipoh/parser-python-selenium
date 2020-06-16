@@ -107,8 +107,7 @@ tuples = [tuple(x.values())[0:] for x in jobs]
 
 print(tuples)
 
-# Uncomment to upload parsed records to the DB
-
+# Uploading parsed records to the DB
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
