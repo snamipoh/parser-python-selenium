@@ -11,15 +11,16 @@ chromedriver = "C:\\chromedriver.exe"
 driver = webdriver.Chrome(chromedriver)
 driver.get("https://www.evolutiongamingcareers.com/search-jobs/?department=&country=")
 
-# Scrolling down the page
+print('Scrolling down the page')
 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-# Click element to download vacancies
+print('Click element to download vacancies')
 while True:
     try:
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='more-jobs-button']"))).click()
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     except TimeoutException:
+        print('Timeout')
         break
 
 jobs = []
@@ -44,61 +45,48 @@ for i in range(num_values):
         'job_date': job_date
     })
 
-# print(jobs)
+job_type2position = (
+    (['javascript', 'typescript', 'react', 'angular', 'vue', 'front'],  'Frontend'),
+    (['scala'], 'Scala'),
+    (['devops'], 'DevOps'),
+    (['product owner'], 'Product'),
+    (['qa'], 'QA'),
+    (["data analyst", "database developer", "data center engineer", "big data", "analyst", "data scientist", "bi analyst" ,"data engineer", "business intelligence" ,"business analyst"], "Data & BI"),
+    (["sre", "site reliability engineer"], 'SRE'),
+    (["security", "security engineer"], 'Security'),
+    (["groovy", "groovy engineer"], "Groovy"),
+    (["embedded software developer", "embedded software engineer", "embedded"], "Embedded SW"),
+    (["ux/ui designer", "UX researcher", "designer", "ux designer"], 'Design'),
+    (["backend", "back"], "Backend"),
+)
+
+map2country = {
+    "netherlands": "Netherlands",
+    "malta": "Malta",
+    "romania": "Romania",
+    "belarus": "Belarus",
+    "latvia": "Latvia",
+    "belgium": "Belgium",
+    "estonia": "Estonia"
+ }
+
+def get_job_type(title):
+    for job_titles, job_type in job_type2position:
+        for job_title in job_titles:
+            if job_title in title:
+                return job_type
+    return 'Other'
 
 for element in jobs:
-    if "javascript" in element['title'].lower() or "typescript" in element['title'].lower() \
-            or "react" in element['title'].lower() or "angular" in element['title'].lower() \
-            or "vue" in element['title'].lower() or "front" in element['title'].lower():
-        element['job_type'] = "Frontend"
-    elif "scala" in element['title'].lower():
-        element['job_type'] = "Scala"
-    elif "devops" in element['title'].lower():
-        element['job_type'] = "DevOps"
-    elif "product owner" in element['title'].lower():
-        element['job_type'] = "Product"
-    elif "qa" in element['title'].lower():
-        element['job_type'] = "QA"
-    elif "data analyst" in element['title'].lower() or "database developer" in element['title'].lower() \
-            or "data center engineer" in element['title'].lower() or "big data" in element['title'].lower() \
-            or "analyst" in element['title'].lower() or "data scientist" in element['title'].lower() \
-            or "bi analyst" in element['title'].lower() or "data engineer" in element['title'].lower() \
-            or "business intelligence" in element['title'].lower() or "business analyst" in element['title'].lower():
-        element['job_type'] = "Data & BI"
-    elif "sre" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = 'SRE'
-    elif "security" in element['title'].lower() or "security engineer" in element['title'].lower():
-        element['job_type'] = 'Security'
-    elif "groovy" in element['title'].lower() or "groovy engineer" in element['title'].lower():
-        element['job_type'] = "Groovy"
-    elif "embedded software developer" in element['title'].lower() \
-            or "embedded software engineer" in element['title'].lower() or "embedded" in element['title'].lower():
-        element['job_type'] = "Embedded SW"
-    elif "ux/ui designer" in element['title'].lower() or "UX researcher" in element['title'].lower() \
-            or "designer" in element['title'].lower() or "ux designer" in element['title'].lower():
-        element['job_type'] = 'Design'
-    elif "backend" in element['title'].lower() or "back" in element['title'].lower():
-        element['job_type'] = "Backend"
-    else:
-        element['job_type'] = "Other"
+    print('Getting job type')
+    title = element['title'].lower()
+    job_type = get_job_type(title)
+    element['job_type'] = job_type
 
-for element in jobs:
-    if "netherlands" in element['location'].lower():
-        element['location'] = "Netherlands"
-    elif "malta" in element['location'].lower():
-        element['location'] = "Malta"
-    elif "romania" in element['location'].lower():
-        element['location'] = "Romania"
-    elif "belarus" in element['location'].lower():
-        element['location'] = "Belarus"
-    elif "latvia" in element['location'].lower():
-        element['location'] = "Latvia"
-    elif "belgium" in element['location'].lower():
-        element['location'] = "Belgium"
-    elif "estonia" in element['location'].lower():
-        element['location'] = "Estonia"
-    else:
-        element['location'] = "Other"
+    print('Processing location')
+    location = element['location'].lower()
+    location_clean = map2country.get(location, 'Other')
+    element['location'] = location_clean
 
 # print(jobs)
 
