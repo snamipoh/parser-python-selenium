@@ -47,41 +47,52 @@ for i in range(num_values):
 
 # print(jobs)
 
-for element in jobs:
-    if "devops" in element['title'].lower():
-        element['job_type'] = "DevOps"
-    elif "data" in element['title'].lower():
-        element['job_type'] = "Data & BI"
-    elif "product manager" in element['title'].lower() or "product marketing" in element['title'].lower():
-        element['job_type'] = "Product"
-    elif "product designer" in element['title'].lower():
-        element['job_type'] = "Design"
-    elif "backend developer" in element['title'].lower() or "back" in element['title'].lower() \
-            or "backend/fullstack" in element['title'].lower():
-        element['job_type'] = "Backend"
-    elif "javascript" in element['title'].lower() or "typescript" in element['title'].lower() \
-            or "react" in element['title'].lower() or "angular" in element['title'].lower() \
-            or "vue" in element['title'].lower() or "front" in element['title'].lower():
-        element['job_type'] = "Frontend"
-    elif "fullstack" in element['title'].lower() or "full stack" in element['title'].lower() \
-            or "full-stack" in element['title'].lower():
-        element['job_type'] = "Fullstack"
-    else:
-        element['job_type'] = "Other"
+job_type_position = (
+    (["devops"], "DevOps"),
+    (["data"], "Data & BI"),
+    (["product manager", "product marketing" ], "Product"),
+    (["designer"], "Design"),
+    (["backend developer", "back", "backend/fullstack"], "Backend"),
+    (["frontend", "front", "javascript", "typescript"], "Frontend"),
+    (["fullstack", "full stack", "full-stack"], "Fullstack"),
+    (["security", "security engineer"], 'Security'),
+    (["groovy", "groovy engineer"], "Groovy"),
+    (["embedded software developer", "embedded software engineer", "embedded"], "Embedded SW"),
+    (["ux/ui designer", "ux researcher", "designer", "ux designer"], 'Design'),
+    (["backend", "back"], "Backend")
+)
+
+map_country = {
+    "helsinki": "Finland"
+ }
+
+
+def get_job_type(title):
+    for job_titles, job_type in job_type_position:
+        for job_title in job_titles:
+            if job_title in title:
+                return job_type
+    return 'Other'
+
 
 for element in jobs:
-    if "helsinki" in element['location'].lower():
-        element['location'] = "Finland"
-    else:
-        element['location'] = "Other"
+    title = element['title'].lower()
+    job_type = get_job_type(title)
+    element['job_type'] = job_type
+
+    location = element['location'].lower()
+    location_clean = map_country.get(location, 'Other')
+    element['location'] = location_clean
 
 # print(jobs)
 
 # Converting dict into list of tuples
 tuples = [tuple(x.values())[0:] for x in jobs]
 print(tuples)
+print(len(tuples))
 
 # Uploading parsed records to the DB
+
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
@@ -90,6 +101,5 @@ cursor.executemany("INSERT INTO jobs (job_title, job_link, job_location, job_typ
 
 conn.commit()
 conn.close()
-
 
 driver.quit()
