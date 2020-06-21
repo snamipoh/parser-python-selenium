@@ -18,7 +18,6 @@ while True:
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//*[@id='more-jobs-button']"))).click()
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     except TimeoutException:
-        print('Timeout')
         break
 
 jobs = []
@@ -51,17 +50,17 @@ for job in jobs:
     job["location"] = job["location"][index_number + 1:]
 
 job_type_position = (
-    (['javascript', 'typescript', 'react', 'angular', 'vue', 'front'], 'Frontend'),
-    (['scala'], 'Scala'),
-    (['devops'], 'DevOps'),
-    (['product owner'], 'Product'),
-    (['qa'], 'QA'),
+    (["javascript", "typescript", "react", "angular", "vue", "front"], "Frontend"),
+    (["scala"], "Scala"),
+    (["devops"], "DevOps"),
+    (["product owner"], "Product"),
+    (["qa"], "QA"),
     (["data analyst", "database developer", "data center engineer", "big data", "analyst", "data scientist", "bi analyst", "data engineer", "business intelligence", "business analyst"], "Data & BI"),
-    (["sre", "site reliability engineer"], 'SRE'),
-    (["security", "security engineer"], 'Security'),
+    (["sre", "site reliability engineer"], "SRE"),
+    (["security", "security engineer"], "Security"),
     (["groovy", "groovy engineer"], "Groovy"),
     (["embedded software developer", "embedded software engineer", "embedded"], "Embedded SW"),
-    (["ux/ui designer", "ux researcher", "designer", "ux designer"], 'Design'),
+    (["ux/ui designer", "ux researcher", "designer", "ux designer"], "Design"),
     (["backend", "back"], "Backend")
 )
 
@@ -81,7 +80,7 @@ def get_job_type(title):
         for job_title in job_titles:
             if job_title in title:
                 return job_type
-    return 'Other'
+    return "Other"
 
 
 for element in jobs:
