@@ -50,16 +50,15 @@ for i in range(num_values):
 job_type_position = (
     (["devops"], "DevOps"),
     (["data"], "Data & BI"),
-    (["product manager", "product marketing" ], "Product"),
+    (["product manager", "product marketing"], "Product"),
     (["designer"], "Design"),
-    (["backend developer", "back", "backend/fullstack"], "Backend"),
+    (["backend", "back", "backend/fullstack"], "Backend"),
     (["frontend", "front", "javascript", "typescript"], "Frontend"),
     (["fullstack", "full stack", "full-stack"], "Fullstack"),
     (["security", "security engineer"], 'Security'),
     (["groovy", "groovy engineer"], "Groovy"),
     (["embedded software developer", "embedded software engineer", "embedded"], "Embedded SW"),
-    (["ux/ui designer", "ux researcher", "designer", "ux designer"], 'Design'),
-    (["backend", "back"], "Backend")
+    (["ux/ui designer", "ux researcher", "designer", "ux designer"], 'Design')
 )
 
 map_country = {
