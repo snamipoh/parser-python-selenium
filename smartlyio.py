@@ -35,7 +35,6 @@ job_date = str(date.today())
 num_values = len(titles)
 
 for i in range(num_values):
-
     jobs.append({
         'title': titles[i].text,
         'link': links[i].get_attribute("href"),
@@ -63,7 +62,7 @@ job_type_position = (
 
 map_country = {
     "helsinki": "Finland"
- }
+}
 
 
 def get_job_type(title):
