@@ -12,9 +12,7 @@ chromedriver = "C:\\chromedriver.exe"
 driver = webdriver.Chrome(chromedriver)
 driver.get("https://n26.com/en/careers/locations/57663")
 
-
 # Accept cookie
-
 while True:
     try:
         WebDriverWait(driver, 20).until(
@@ -51,7 +49,6 @@ section_2 = driver.find_elements_by_xpath("//ul[@class='ah aj al an ap aq jp kd 
 time.sleep(5)
 
 for i in section_2:
-
     jobs.append({
         'title': i.find_element_by_css_selector("a").get_property("text"),
         'link': i.find_element_by_css_selector("a").get_attribute("href"),
@@ -71,43 +68,41 @@ for job in jobs:
 
 # print(jobs)
 
-for job in jobs:
-    if "security" in job['title'].lower() or "security engineer" in job['title'].lower():
-        job['job_type'] = "Security"
-    elif "tech lead" in job['title'].lower() or "engineering manager" in job['title'].lower() \
-            or "head of infrastructure" in job['title'].lower() \
-            or "director of technology" in job['title'].lower() \
-            or "head of engineering" in job['title'].lower():
-        job['job_type'] = 'Tech Lead'
-    elif "data analyst" in job['title'].lower() or "big data" in job['title'].lower() \
-            or "analyst" in job['title'].lower() or "data scientist" in job['title'].lower() \
-            or "bi analyst" in job['title'].lower() or "data engineer" in job['title'].lower() \
-            or "business intelligence" in job['title'].lower() or "machine learning" in job['title'].lower():
-        job['job_type'] = 'Data & BI'
-    elif "sre" in job['title'].lower() or "site reliability engineer" in job['title'].lower():
-        job['job_type'] = 'SRE'
-    elif "devops" in job['title'].lower():
-        job['job_type'] = "DevOps"
-    elif "director of product design" in job['title'].lower() or "UX researcher" in job['title'].lower() \
-            or "designer" in job['title'].lower() or "ux designer" in job['title'].lower():
-        job['job_type'] = "Design"
-    elif "backend" in job['title'].lower() or "back" in job['title'].lower():
-        job['job_type'] = "Backend"
-    elif "javascript" in job['title'].lower() or "typescript" in job['title'].lower() \
-            or "react" in job['title'].lower() or "angular" in job['title'].lower() \
-            or "vue" in job['title'].lower() or "front" in job['title'].lower():
-        job['job_type'] = "Frontend"
-    else:
-        job['job_type'] = "Other"
+job_type_position = (
+    (["data analyst", "big data", "analyst", "data scientist", "bi analyst", "data engineer", "business intelligence", "machine learning"], "Data & BI"),
+    (["director of product design", "UX researcher", "designer", "ux designer"], "Design"),
+    (["backend", "back"], "Backend"),
+    (["frontend", "front", "javascript", "typescript"], "Frontend"),
+    (["security", "security engineer"], 'Security'),
+    (["tech lead", "engineering manager", "head of infrastructure", "director of technology", "head of engineering"], "Tech Lead"),
+    (["site reliability engineer"], "SRE"),
+    (["devops"], "DevOps")
+)
+
+
+def get_job_type(title):
+    for job_titles, job_type in job_type_position:
+        for job_title in job_titles:
+            if job_title in title:
+                return job_type
+    return 'Other'
+
+
+for element in jobs:
+    title = element['title'].lower()
+    job_type = get_job_type(title)
+    element['job_type'] = job_type
+
 
 # print(jobs)
 
 # Converting dict into list of tuples
 tuples = [tuple(x.values())[0:] for x in jobs]
-
 print(tuples)
+print(len(tuples))
 
 # Uploading parsed records to the DB
+
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
