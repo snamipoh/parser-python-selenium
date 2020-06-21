@@ -73,7 +73,7 @@ job_type_position = (
     (["director of product design", "UX researcher", "designer", "ux designer"], "Design"),
     (["backend", "back"], "Backend"),
     (["frontend", "front", "javascript", "typescript"], "Frontend"),
-    (["security", "security engineer"], 'Security'),
+    (["security", "security engineer"], "Security"),
     (["tech lead", "engineering manager", "head of infrastructure", "director of technology", "head of engineering"], "Tech Lead"),
     (["site reliability engineer"], "SRE"),
     (["devops"], "DevOps")
@@ -85,7 +85,7 @@ def get_job_type(title):
         for job_title in job_titles:
             if job_title in title:
                 return job_type
-    return 'Other'
+    return "Other"
 
 
 for element in jobs:
