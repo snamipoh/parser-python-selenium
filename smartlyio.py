@@ -54,10 +54,10 @@ job_type_position = (
     (["backend", "back", "backend/fullstack"], "Backend"),
     (["frontend", "front", "javascript", "typescript"], "Frontend"),
     (["fullstack", "full stack", "full-stack"], "Fullstack"),
-    (["security", "security engineer"], 'Security'),
+    (["security", "security engineer"], "Security"),
     (["groovy", "groovy engineer"], "Groovy"),
     (["embedded software developer", "embedded software engineer", "embedded"], "Embedded SW"),
-    (["ux/ui designer", "ux researcher", "designer", "ux designer"], 'Design')
+    (["ux/ui designer", "ux researcher", "designer", "ux designer"], "Design")
 )
 
 map_country = {
@@ -70,7 +70,7 @@ def get_job_type(title):
         for job_title in job_titles:
             if job_title in title:
                 return job_type
-    return 'Other'
+    return "Other"
 
 
 for element in jobs:
