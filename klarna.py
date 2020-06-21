@@ -24,7 +24,6 @@ job_date = str(date.today())
 num_values = len(titles)
 
 for i in range(num_values):
-
     jobs.append({
         'title': titles[i].text,
         'link': links[i].get_attribute("href"),
@@ -36,62 +35,63 @@ for i in range(num_values):
 
 # print(jobs)
 
-for element in jobs:
-    if "analyst" in element['title'].lower() or "data scientist" in element['title'].lower() \
-            or "business intelligence developer" in element['title'].lower() \
-            or "data" in element['title'].lower() or "etl developer" in element['title'].lower():
-        element['job_type'] = "Data & BI"
-    elif "designer" in element['title'].lower() or "product design" in element['title'].lower() \
-            or "product designer" in element['title'].lower() or "ux writer" in element['title'].lower():
-        element['job_type'] = "Design"
-    elif "product manager" in element['title'].lower():
-        element['job_type'] = "Product"
-    elif "security" in element['title'].lower():
-        element['job_type'] = "Security"
-    elif "devops" in element['title'].lower():
-        element['job_type'] = "DevOps"
-    elif "Script" in element['title'] or "react" in element['title'].lower() \
-            or "vue" in element['title'].lower() or "front" in element['title'].lower():
-        element['job_type'] = "Frontend"
-    elif "Java" in element['title']:
-        element['job_type'] = "Java"
-    elif "sre" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = "SRE"
-    elif "python" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = "Backend"
-    elif "php" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = "Backend"
-    elif "android" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = "Android"
-    elif "ios" in element['title'].lower() or "site reliability engineer" in element['title'].lower():
-        element['job_type'] = "iOS"
-    else:
-        element['job_type'] = "Other"
+# Deleting unnecessary words after parsing locations
+for job in jobs:
+    index_number = job["location"].find(",")
+    # print(index_number)
+    job["location"] = job["location"][:index_number]
+
+job_type_position = (
+    (["devops"], "DevOps"),
+    (["analyst", "data analyst", "bi analyst", "data engineer", "data scientist", "business intelligence", "data warehouse"], "Data & BI"),
+    (["product manager", "product marketing"], "Product"),
+    (["designer", "product design", "product designer", "ux writer", "ux research"], "Design"),
+    (["backend", "back", "python", "php"], "Backend"),
+    (["javascript", "typescript", "react", "angular", "vue", "front"], "Frontend"),
+    (["fullstack", "full stack", "full-stack"], "Fullstack"),
+    (["security"], "Security"),
+    (["android"], "Android"),
+    (["ios"], "iOS"),
+    (["java", "senior backend engineer - java"], "Java"),
+    (["sre", "site reliability engineer"], "SRE")
+)
+
+map_country = {
+    "amsterdam": "Netherlands",
+    "berlin": "Germany",
+    "munich": "Germany",
+    "giessen": "Germany",
+    "madrid": "Spain",
+    "stockholm": "Sweden"
+}
+
+
+def get_job_type(title):
+    for job_titles, job_type in job_type_position:
+        for job_title in job_titles:
+            if job_title in title:
+                return job_type
+    return "Other"
 
 
 for element in jobs:
-    if "amsterdam" in element['location'].lower():
-        element['location'] = "Netherlands"
-    elif "berlin" in element['location'].lower():
-        element['location'] = "Germany"
-    elif "giessen" in element['location'].lower():
-        element['location'] = "Germany"
-    elif "madrid" in element['location'].lower():
-        element['location'] = "Spain"
-    elif "munich" in element['location'].lower():
-        element['location'] = "Germany"
-    elif "stockholm" in element['location'].lower():
-        element['location'] = "Sweden"
-    else:
-        element['location'] = "Other"
+    title = element['title'].lower()
+    job_type = get_job_type(title)
+    element['job_type'] = job_type
+
+    location = element['location'].lower()
+    location_clean = map_country.get(location, 'Other')
+    element['location'] = location_clean
 
 # print(jobs)
 
 # Converting dict into list of tuples
 tuples = [tuple(x.values())[0:] for x in jobs]
 print(tuples)
+print(len(tuples))
 
 # Uploading parsed records to the DB
+
 conn = sqlite3.connect("jobs.db")
 cursor = conn.cursor()
 
